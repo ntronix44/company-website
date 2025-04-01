@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ntronix - Smart Power Solutions</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0EA5E9',
+                        secondary: '#64748B'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: white;
+            z-index: 100;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+    <div id="menuOverlay" class="menu-overlay"></div>
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-2">
+                <img src="https://static.readdy.ai/image/667419ca10697304df83e3b31516c4ec/802a488e3607a520883c5340be484ec1.png"
+                    alt="Ntronix Logo" class="h-8">
+                <span class="text-2xl font-semibold text-gray-900">Ntronix</span>
+            </div>
+            <button id="closeMenu" class="w-10 h-10 flex items-center justify-center cursor-pointer">
+                <i class="ri-close-line text-2xl"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-6">
+            <a href="#products" class="text-gray-600 hover:text-primary py-2 border-b border-gray-100">Products</a>
+            <a href="#marketplace"
+                class="text-gray-600 hover:text-primary py-2 border-b border-gray-100">Marketplace</a>
+            <a href="#technology" class="text-gray-600 hover:text-primary py-2 border-b border-gray-100">Technology</a>
+            <a href="#about" class="text-gray-600 hover:text-primary py-2 border-b border-gray-100">About</a>
+            <a href="#contact" class="text-gray-600 hover:text-primary py-2 border-b border-gray-100">Contact</a>
+            <button
+                class="bg-primary text-white px-6 py-3 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer mt-4">
+                Get Started
+            </button>
+        </div>
+    </div>
+    <header class="fixed w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
+        <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="https://static.readdy.ai/image/667419ca10697304df83e3b31516c4ec/802a488e3607a520883c5340be484ec1.png"
+                    alt="Ntronix Logo" class="h-8">
+                <span class="text-2xl font-semibold text-gray-900">Ntronix</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#products" class="text-gray-600 hover:text-primary">Products</a>
+                <a href="#marketplace" class="text-gray-600 hover:text-primary">Marketplace</a>
+                <a href="#technology" class="text-gray-600 hover:text-primary">Technology</a>
+                <a href="#about" class="text-gray-600 hover:text-primary">About</a>
+                <a href="#contact" class="text-gray-600 hover:text-primary">Contact</a>
+                <button
+                    class="bg-primary text-white px-6 py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                    Get Started
+                </button>
+            </div>
+            <button id="openMenu" class="md:hidden w-10 h-10 flex items-center justify-center cursor-pointer">
+                <i class="ri-menu-line text-2xl"></i>
+            </button>
+        </nav>
+    </header>
+    <main>
+        <section class="relative pt-24 overflow-hidden bg-gradient-to-br from-gray-50 to-white min-h-[800px]">
+            <div class="container mx-auto px-6 py-20">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="relative z-10">
+                        <h1 class="text-5xl font-bold leading-tight mb-6 fade-in" style="animation-delay: 0.1s">
+                            Powering Tomorrow's <span class="text-primary">Smart Energy</span> Solutions
+                        </h1>
+                        <p class="text-lg text-gray-600 mb-8 fade-in" style="animation-delay: 0.3s">
+                            Transform your power management with our cutting-edge hybrid inverters, smart portable power
+                            stations, and intelligent switches. Connect to our marketplace to buy, sell, and trade
+                            energy efficiently.
+                        </p>
+                        <div class="flex gap-4 fade-in" style="animation-delay: 0.5s">
+                            <button
+                                class="bg-primary text-white px-8 py-3 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                                Explore Products
+                            </button>
+                            <button
+                                class="border border-gray-200 px-8 py-3 !rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap cursor-pointer">
+                                Learn More
+                            </button>
+                        </div>
+                        <div class="mt-12 grid grid-cols-3 gap-8 fade-in" style="animation-delay: 0.7s">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-primary mb-2">99%</div>
+                                <div class="text-sm text-gray-600">Energy Efficiency</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-primary mb-2">24/7</div>
+                                <div class="text-sm text-gray-600">Smart Monitoring</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-primary mb-2">5000+</div>
+                                <div class="text-sm text-gray-600">Happy Customers</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative fade-in" style="animation-delay: 0.4s">
+                        <img src="https://public.readdy.ai/ai/img_res/96141289fc25bafa4130b1a017b1520f.jpg"
+                            alt="Smart Power Solutions" class="rounded-2xl shadow-2xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="products" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">Our Smart Solutions</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">
+                        Discover our range of innovative power products designed to bring intelligence and efficiency to
+                        your energy management.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <img src="https://public.readdy.ai/ai/img_res/a0f9c36b76594ad8a967bf4d40066fd5.jpg"
+                            alt="Hybrid Inverter" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Smart Hybrid Inverters</h3>
+                            <p class="text-gray-600 mb-4">
+                                Advanced hybrid inverters with intelligent power management and seamless grid
+                                integration.
+                            </p>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">99% Conversion Efficiency</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">Smart Grid Integration</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">Remote Monitoring</span>
+                                </li>
+                            </ul>
+                            <button
+                                class="w-full bg-gray-50 text-gray-900 py-2 !rounded-button hover:bg-gray-100 transition-colors cursor-pointer">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <img src="https://public.readdy.ai/ai/img_res/881a5d26b1ca35989322d35c8e9443c5.jpg"
+                            alt="Portable Power Station" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Smart Portable Power Stations</h3>
+                            <p class="text-gray-600 mb-4">
+                                Portable power stations with smart connectivity and real-time monitoring capabilities.
+                            </p>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">Mobile App Control</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">Fast Charging</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">Multiple Outputs</span>
+                                </li>
+                            </ul>
+                            <button
+                                class="w-full bg-gray-50 text-gray-900 py-2 !rounded-button hover:bg-gray-100 transition-colors cursor-pointer">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <img src="https://public.readdy.ai/ai/img_res/9dfa0990a9c7e2bc571d91e32e745035.jpg"
+                            alt="Smart Switches" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Smart Switches</h3>
+                            <p class="text-gray-600 mb-4">
+                                Intelligent switches for automated power management and energy optimization.
+                            </p>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">Voice Control</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">Energy Monitoring</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="ri-check-line text-primary"></i>
+                                    <span class="text-sm text-gray-600">Schedule Setting</span>
+                                </li>
+                            </ul>
+                            <button
+                                class="w-full bg-gray-50 text-gray-900 py-2 !rounded-button hover:bg-gray-100 transition-colors cursor-pointer">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="marketplace" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">Energy Marketplace</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">
+                        Connect with our global network of energy providers and consumers. Buy, sell, and trade energy
+                        efficiently through our secure platform.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-lg mb-6">
+                            <i class="ri-exchange-line text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Energy Trading</h3>
+                        <p class="text-gray-600 mb-4">
+                            Trade excess energy with neighbors and businesses in your community. Set your prices and
+                            manage transactions seamlessly.
+                        </p>
+                        <a href="#" class="text-primary font-medium flex items-center gap-1 hover:underline">
+                            Learn more <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-lg mb-6">
+                            <i class="ri-store-2-line text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Equipment Store</h3>
+                        <p class="text-gray-600 mb-4">
+                            Shop for the latest energy equipment, accessories, and upgrades. Find certified installers
+                            and service providers.
+                        </p>
+                        <a href="#" class="text-primary font-medium flex items-center gap-1 hover:underline">
+                            Browse store <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-lg mb-6">
+                            <i class="ri-community-line text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Community Grid</h3>
+                        <p class="text-gray-600 mb-4">
+                            Join local energy communities to share resources, reduce costs, and increase resilience
+                            through collaborative energy management.
+                        </p>
+                        <a href="#" class="text-primary font-medium flex items-center gap-1 hover:underline">
+                            Join now <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-16 bg-gray-50 rounded-2xl p-8">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4">Marketplace Benefits</h3>
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <div
+                                        class="w-6 h-6 flex items-center justify-center bg-primary/20 rounded-full mt-0.5">
+                                        <i class="ri-check-line text-primary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium">Reduced Energy Costs</h4>
+                                        <p class="text-sm text-gray-600">Save up to 30% on energy costs through
+                                            peer-to-peer trading</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <div
+                                        class="w-6 h-6 flex items-center justify-center bg-primary/20 rounded-full mt-0.5">
+                                        <i class="ri-check-line text-primary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium">Increased Grid Resilience</h4>
+                                        <p class="text-sm text-gray-600">Create redundancy and backup power sources
+                                            within your community</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <div
+                                        class="w-6 h-6 flex items-center justify-center bg-primary/20 rounded-full mt-0.5">
+                                        <i class="ri-check-line text-primary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium">Sustainable Energy Ecosystem</h4>
+                                        <p class="text-sm text-gray-600">Promote renewable energy adoption and reduce
+                                            carbon footprint</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <img src="https://public.readdy.ai/ai/img_res/3c7d948ce91ded9e52a732217476e576.jpg"
+                                alt="Energy Marketplace" class="rounded-xl shadow-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="technology" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">Advanced Technology</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">
+                        Our innovative technology platform brings intelligence and efficiency to power management.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-semibold mb-4">Smart IoT Integration</h3>
+                            <p class="text-gray-600">
+                                Connect and control all your power devices through our intelligent IoT platform. Monitor
+                                performance, optimize energy usage, and receive real-time alerts.
+                            </p>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="flex gap-4">
+                                <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                                    <i class="ri-wifi-line text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Wireless Connectivity</h4>
+                                    <p class="text-sm text-gray-600">Seamless connection with WiFi and Bluetooth
+                                        technology</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                                    <i class="ri-database-2-line text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Real-time Analytics</h4>
+                                    <p class="text-sm text-gray-600">Advanced data analysis for optimal performance</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                                    <i class="ri-shield-check-line text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Smart Protection</h4>
+                                    <p class="text-sm text-gray-600">Intelligent safety features and surge protection
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div id="techChart" class="w-full h-[400px]"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="about" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="relative">
+                        <img src="https://public.readdy.ai/ai/img_res/5dbc88c749b2e5ee89ac93d82e5959ba.jpg"
+                            alt="About Ntronix" class="rounded-2xl shadow-xl">
+                    </div>
+                    <div>
+                        <h2 class="text-4xl font-bold mb-6">About Ntronix</h2>
+                        <p class="text-gray-600 mb-6">
+                            At Ntronix, we're dedicated to revolutionizing power management through innovative
+                            technology and smart solutions. Our mission is to make energy consumption more efficient,
+                            intelligent, and sustainable.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="flex gap-4 items-start">
+                                <div
+                                    class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg shrink-0">
+                                    <i class="ri-award-line text-primary text-xl"></i>8997yu nbn nn
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Industry Leadership</h4>
+                                    <p class="text-sm text-gray-600">
+                                        Recognized leader in smart power solutions with numerous industry awards
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div
+                                    class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg shrink-0">
+                                    <i class="ri-team-line text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Expert Team</h4>
+                                    <p class="text-sm text-gray-600">
+                                        Dedicated professionals with deep expertise in power electronics and IoT
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div
+                                    class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg shrink-0">
+                                    <i class="ri-customer-service-2-line text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">24/7 Support</h4>
+                                    <p class="text-sm text-gray-600">
+                                        Round-the-clock technical support and customer service
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="contact" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">Get in Touch</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">
+                        Have questions about our products or need support? We're here to help.
+                    </p>
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <form id="contactForm" class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                                <input type="text"
+                                    class="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email"
+                                    class="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                    required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                                <input type="text"
+                                    class="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                    required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                                <textarea rows="4"
+                                    class="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                    required></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <button type="submit"
+                                    class="w-full bg-primary text-white py-3 !rounded-button hover:bg-primary/90 transition-colors cursor-pointer">
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8 mt-12">
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 mx-auto flex items-center justify-center bg-primary/10 rounded-lg mb-4">
+                                <i class="ri-map-pin-line text-primary text-xl"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">Address</h4>
+                            <p class="text-sm text-gray-600">123 Tech Street, Innovation District, 10001</p>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 mx-auto flex items-center justify-center bg-primary/10 rounded-lg mb-4">
+                                <i class="ri-phone-line text-primary text-xl"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">Phone</h4>
+                            <p class="text-sm text-gray-600">+1 (555) 123-4567</p>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 mx-auto flex items-center justify-center bg-primary/10 rounded-lg mb-4">
+                                <i class="ri-mail-line text-primary text-xl"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">Email</h4>
+                            <p class="text-sm text-gray-600">contact@ntronix.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <img src="https://static.readdy.ai/image/667419ca10697304df83e3b31516c4ec/802a488e3607a520883c5340be484ec1.png"
+                            alt="Ntronix Logo" class="h-8 brightness-200">
+                        <span class="text-2xl font-semibold">Ntronix</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Leading the way in smart power solutions and energy management technology.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Products</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Hybrid Inverters</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Portable Power Stations</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Smart Switches</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Accessories</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Marketplace</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Connect</h4>
+                    <div class="flex gap-4 mb-6">
+                        <a href="#"
+                            class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors">
+                            <i class="ri-facebook-fill"></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors">
+                            <i class="ri-twitter-fill"></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors">
+                            <i class="ri-linkedin-fill"></i>
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <input type="email" placeholder="Subscribe to newsletter"
+                            class="w-full px-4 py-2 bg-gray-800 rounded border-none text-sm">
+                        <button class="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80">
+                            <i class="ri-send-plane-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 Ntronix. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu functionality
+            const openMenuBtn = document.getElementById('openMenu');
+            const closeMenuBtn = document.getElementById('closeMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            function openMenu() {
+                mobileMenu.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeMenu() {
+                mobileMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            openMenuBtn.addEventListener('click', openMenu);
+            closeMenuBtn.addEventListener('click', closeMenu);
+            menuOverlay.addEventListener('click', closeMenu);
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    closeMenu();
+                });
+            });
+            // Fade in animations for sections
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const elements = entry.target.querySelectorAll('.fade-in-section');
+                        elements.forEach((el, index) => {
+                            setTimeout(() => {
+                                el.classList.add('fade-in');
+                            }, index * 150);
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+            // Add fade-in-section class to elements that should animate on scroll
+            document.querySelectorAll('section').forEach(section => {
+                const headings = section.querySelectorAll('h2, h3');
+                const paragraphs = section.querySelectorAll('p:not(.fade-in)');
+                const cards = section.querySelectorAll('.bg-white.rounded-xl, .bg-white.rounded-2xl');
+
+                [...headings, ...paragraphs, ...cards].forEach(el => {
+                    if (!el.classList.contains('fade-in')) {
+                        el.classList.add('fade-in-section');
+                    }
+                });
+            });
+            // Chart initialization
+            const chart = echarts.init(document.getElementById('techChart'));
+            const option = {
+                animation: false,
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    borderColor: '#eee',
+                    borderWidth: 1,
+                    textStyle: {
+                        color: '#1f2937'
+                    }
+                },
+                grid: {
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 60
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e5e7eb'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e5e7eb'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#f3f4f6'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Energy Efficiency',
+                        type: 'line',
+                        smooth: true,
+                        data: [85, 88, 90, 93, 95, 98],
+                        lineStyle: {
+                            color: 'rgba(87, 181, 231, 1)'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgba(87, 181, 231, 0.3)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgba(87, 181, 231, 0.1)'
+                                }
+                            ])
+                        },
+                        symbol: 'none'
+                    }
+                ]
+            };
+            chart.setOption(option);
+            window.addEventListener('resize', function () {
+                chart.resize();
+            });
+            // Contact form submission
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData.entries());
+                const successMessage = document.createElement('div');
+                successMessage.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50';
+                successMessage.textContent = 'Message sent successfully!';
+                document.body.appendChild(successMessage);
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+                contactForm.reset();
+            });
+        });
+    </script>
+</body>
+
+</html>
