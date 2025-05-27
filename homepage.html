@@ -12,91 +12,8 @@
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0EA5E9',
-                        secondary: '#64748B'
-                    },
-                    borderRadius: {
-                        'none': '0px',
-                        'sm': '4px',
-                        DEFAULT: '8px',
-                        'md': '12px',
-                        'lg': '16px',
-                        'xl': '20px',
-                        '2xl': '24px',
-                        '3xl': '32px',
-                        'full': '9999px',
-                        'button': '8px'
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        :where([class^="ri-"])::before {
-            content: "\f3c2";
-        }
+    <link rel="stylesheet" href="home.css">
 
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100vh;
-            background-color: white;
-            z-index: 100;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-            transition: right 0.3s ease;
-            padding: 2rem;
-            overflow-y: auto;
-        }
-
-        .mobile-menu.active {
-            right: 0;
-        }
-
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 99;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .menu-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-    </style>
 </head>
 
 <body class="bg-white">
@@ -558,7 +475,7 @@
                                 <i class="ri-phone-line text-primary text-xl"></i>
                             </div>
                             <h4 class="font-semibold mb-2">Phone</h4>
-                            <p class="text-sm text-gray-600">+1 (555) 123-4567</p>
+                            <p class="text-sm text-gray-600">+256 790-737778</p>
                         </div>
                         <div class="text-center">
                             <div
@@ -566,7 +483,7 @@
                                 <i class="ri-mail-line text-primary text-xl"></i>
                             </div>
                             <h4 class="font-semibold mb-2">Email</h4>
-                            <p class="text-sm text-gray-600">contact@ntronix.com</p>
+                            <p class="text-sm text-gray-600">ntronixsmartcity@ntronix.com</p>
                         </div>
                     </div>
                 </div>
@@ -635,159 +552,7 @@
             </div>
         </div>
     </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Mobile menu functionality
-            const openMenuBtn = document.getElementById('openMenu');
-            const closeMenuBtn = document.getElementById('closeMenu');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
-            function openMenu() {
-                mobileMenu.classList.add('active');
-                menuOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-            function closeMenu() {
-                mobileMenu.classList.remove('active');
-                menuOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            openMenuBtn.addEventListener('click', openMenu);
-            closeMenuBtn.addEventListener('click', closeMenu);
-            menuOverlay.addEventListener('click', closeMenu);
-            mobileMenuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    closeMenu();
-                });
-            });
-            // Fade in animations for sections
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const elements = entry.target.querySelectorAll('.fade-in-section');
-                        elements.forEach((el, index) => {
-                            setTimeout(() => {
-                                el.classList.add('fade-in');
-                            }, index * 150);
-                        });
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-            document.querySelectorAll('section').forEach(section => {
-                observer.observe(section);
-            });
-            // Add fade-in-section class to elements that should animate on scroll
-            document.querySelectorAll('section').forEach(section => {
-                const headings = section.querySelectorAll('h2, h3');
-                const paragraphs = section.querySelectorAll('p:not(.fade-in)');
-                const cards = section.querySelectorAll('.bg-white.rounded-xl, .bg-white.rounded-2xl');
-
-                [...headings, ...paragraphs, ...cards].forEach(el => {
-                    if (!el.classList.contains('fade-in')) {
-                        el.classList.add('fade-in-section');
-                    }
-                });
-            });
-            // Chart initialization
-            const chart = echarts.init(document.getElementById('techChart'));
-            const option = {
-                animation: false,
-                tooltip: {
-                    trigger: 'axis',
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    borderColor: '#eee',
-                    borderWidth: 1,
-                    textStyle: {
-                        color: '#1f2937'
-                    }
-                },
-                grid: {
-                    top: 20,
-                    right: 20,
-                    bottom: 20,
-                    left: 60
-                },
-                xAxis: {
-                    type: 'category',
-                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    axisLine: {
-                        lineStyle: {
-                            color: '#e5e7eb'
-                        }
-                    },
-                    axisLabel: {
-                        color: '#1f2937'
-                    }
-                },
-                yAxis: {
-                    type: 'value',
-                    axisLine: {
-                        lineStyle: {
-                            color: '#e5e7eb'
-                        }
-                    },
-                    axisLabel: {
-                        color: '#1f2937'
-                    },
-                    splitLine: {
-                        lineStyle: {
-                            color: '#f3f4f6'
-                        }
-                    }
-                },
-                series: [
-                    {
-                        name: 'Energy Efficiency',
-                        type: 'line',
-                        smooth: true,
-                        data: [85, 88, 90, 93, 95, 98],
-                        lineStyle: {
-                            color: 'rgba(87, 181, 231, 1)'
-                        },
-                        areaStyle: {
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                                {
-                                    offset: 0,
-                                    color: 'rgba(87, 181, 231, 0.3)'
-                                },
-                                {
-                                    offset: 1,
-                                    color: 'rgba(87, 181, 231, 0.1)'
-                                }
-                            ])
-                        },
-                        symbol: 'none'
-                    }
-                ]
-            };
-            chart.setOption(option);
-            window.addEventListener('resize', function () {
-                chart.resize();
-            });
-            // Contact form submission
-            const contactForm = document.getElementById('contactForm');
-            contactForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                const formData = new FormData(contactForm);
-                const data = Object.fromEntries(formData.entries());
-                const successMessage = document.createElement('div');
-                successMessage.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50';
-                successMessage.textContent = 'Message sent successfully!';
-                document.body.appendChild(successMessage);
-                setTimeout(() => {
-                    successMessage.remove();
-                }, 3000);
-                contactForm.reset();
-            });
-        });
-    </script>
+    <script src="home.js"></script>
 </body>
 
 </html>
